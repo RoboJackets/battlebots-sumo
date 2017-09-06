@@ -60,8 +60,8 @@ int BIN2 = 12; //Direction
 char past;
 int count;
 int threshold;
+short iter;
 void setup() {
-  Serial.begin(9600);
   pinMode(STBY, OUTPUT);
 
   pinMode(PWMA, OUTPUT);
@@ -73,13 +73,19 @@ void setup() {
   pinMode(BIN2, OUTPUT);
   past = 'f';
   count = 0;
+  iter = 0;
   threshold = analogRead(backleft) + 200;
 }
 
 void loop() {
   // Get distance from sensor
-  unsigned int distance = sensor.getDist();
-  unsigned int distance2 = sensor2.getDist();
+  iter ++;
+  if (iter == 1) {
+    unsigned int distance = sensor.getDist();
+    unsigned int distance2 = sensor2.getDist();
+  } else if (iter == 5) {
+    iter = 0;
+  }
   if (backleft > threshold) {
     move(1, 120, 1); //motor 1, full speed, left
     move(2, 40, 0); //motor 2, full speed, left
@@ -92,37 +98,37 @@ void loop() {
   } else if (frontright > threshold) {
     move(1, 120, 0); //motor 1, full speed, left
     move(2, 40, 1); //motor 2, full speed, left
-  } else if (((past == 'f' || count >= 30) && (distance > 600 && distance2 > 600)) || (distance <= 300 && distance2 < 300)) {
-    move(1, 128, 1); //motor 1, full speed, left
-    move(2, 128, 0); //motor 2, full speed, left
-    past == 'f';
-    count = 0;
-  } else if (past == 'l') {
-    move(1, 20, 1); //motor 1, full speed, left
-    move(2, 128, 0); //motor 2, full speed, left
-    past = 'l';
-    count++;
-  } else if (past == 'r') {
-    move(1, 128, 1); //motor 1, full speed, left
-    move(2, 20, 0); //motor 2, full speed, left
-    past = 'r';
-    count++;
-  } else if (distance > 600) {
-    move(1, 20, 1); //motor 1, full speed, left
-    move(2, 128, 0); //motor 2, full speed, left
-    past = 'l';
-  } else{
-    move(1, 128, 1); //motor 1, full speed, left
-    move(2, 20, 0); //motor 2, full speed, left
-    past == 'r';
+  } else if (iter == 1){
+    if (((past == 'f' || count >= 30) && (distance > 600 && distance2 > 600)) || (distance <= 300 && distance2 < 300)) {
+      move(1, 128, 1); //motor 1, full speed, left
+      move(2, 128, 0); //motor 2, full speed, left
+      past == 'f';
+      count = 0;
+    } else if (past == 'l') {
+      move(1, 20, 1); //motor 1, full speed, left
+      move(2, 128, 0); //motor 2, full speed, left
+      past = 'l';
+      count++;
+    } else if (past == 'r') {
+      move(1, 128, 1); //motor 1, full speed, left
+      move(2, 20, 0); //motor 2, full speed, left
+      past = 'r';
+      count++;
+    } else if (distance > 600) {
+      move(1, 20, 1); //motor 1, full speed, left
+      move(2, 128, 0); //motor 2, full speed, left
+      past = 'l';
+    } else{
+      move(1, 128, 1); //motor 1, full speed, left
+      move(2, 20, 0); //motor 2, full speed, left
+      past == 'r';
+    }
   }
   
 
   // Print distance to Serial
-  Serial.println(distance/25.4);
-
   // Wait some time
-  delay(30);
+  delay(5);
 }
 
 void move(int motor, int speed, int direction){
