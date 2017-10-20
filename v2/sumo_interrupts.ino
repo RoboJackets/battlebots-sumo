@@ -1,8 +1,8 @@
 // bare-bones setup of the interrupts for the sumo robot
 
 //***PCB MODIFICATION***
-// for blls, jump D13 to A6 (can pick whatever unused digital pin)
-// for brls, jump D12 to A7 (can pick whatever unused digital pin)
+// for blls, jump D9 to A6 (can pick whatever unused digital pin)
+// for brls, jump D8 to A7 (can pick whatever unused digital pin)
 
 //***Additional notes***
 // check if these interrupts interfere with writeMicrseconds()
@@ -21,8 +21,8 @@ short flls = A2; //front-left line sensor, PCINT 10
 short frls = A3; //front-right line sensor, PCINT 11
 
 //part of PCINT0_vect
-short blls = 13; //back-left line sensor, PCINT 5
-short brls = 12; //back-right line sensor, PCINT 4
+short blls = 9; //back-left line sensor, PCINT 0
+short brls = 8; //back-right line sensor, PCINT 1
 
 unsigned int flag; //used to see which sensor was triggered
 
@@ -37,7 +37,7 @@ void setup() {
   PCICR |= B00000111;   // Enable PCINT0, PCINT1, PCINT2 (all interrupt groups)
   PCMSK2 |= B00010000;  // For each PCINT_vect, enable the PCINTs mentioned above with PCMSK
   PCMSK1 |= B00001100;
-  PCMSK0 |= B00110000;
+  PCMSK0 |= B00000011;
 }
 
 void loop() {
