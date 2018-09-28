@@ -40,6 +40,4 @@ const int degrees180 = 1500; 	// duration of 180 deg turn (ms)
 
 const int degrees45 = 175;
 
-// Accelerometer collision threshold
-
 // 		Consult with Mason, TBD
