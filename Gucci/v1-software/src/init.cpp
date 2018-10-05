@@ -212,6 +212,6 @@ void startUp() {
         prevFlag = cur;
         prevFlagSet = true;
     } else {
-        movement(2);
+        moveState(2);
     }
 }
