@@ -14,10 +14,14 @@ extern VL53L0X sensor0;	// RR
 extern VL53L0X sensor1;	// RM
 extern VL53L0X sensor2;	// LM
 extern VL53L0X sensor3;	// LL
+extern VL53L0X sensor4;
+extern VL53L0X sensor5;
 extern uint16_t LL_distance;
 extern uint16_t LM_distance;
 extern uint16_t RM_distance;
 extern uint16_t RR_distance;
+extern uint16_t RS_distance;
+extern uint16_t LS_distance;
 
 // Line sensors
 extern int FL;    // AUX BOARD SWITCHED FL and FR up
