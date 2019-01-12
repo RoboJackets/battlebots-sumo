@@ -28,12 +28,6 @@
 
 #include <logic.h>
 
-VL53L0X sensor0;
-VL53L0X sensor1;
-VL53L0X sensor2;
-VL53L0X sensor3;
-VL53L0X sensor4;
-VL53L0X sensor5;
 int L_command = 0;
 int R_command = 0;
 int L_dir = 1;
@@ -117,17 +111,27 @@ void fuzzy_init() {
 
     // OUTPUT: 1 of 1 (Test 1 *********************************)
     FuzzyOutput* drive_state = new FuzzyOutput(1);
-    FuzzySet* point_turn_left = new FuzzySet(0, 3.6, 7.1, 10.7); //Readjust others to include 3.57 per
-    FuzzySet* full_left = new FuzzySet(14.3, 17.9, 21.4, 25.0);
-    FuzzySet* small_left = new FuzzySet(28.6, 32.1, 35.7, 39.3);
-    FuzzySet* center = new FuzzySet(42.8, 46.4, 50.0, 53.6);
+    // FuzzySet* point_turn_left = new FuzzySet(0, 3.6, 7.1, 10.7); //Readjust others to include 3.57 per
+    // FuzzySet* full_left = new FuzzySet(14.3, 17.9, 21.4, 25.0);
+    // FuzzySet* small_left = new FuzzySet(28.6, 32.1, 35.7, 39.3);
+    // FuzzySet* center = new FuzzySet(42.8, 46.4, 50.0, 53.6);
+    // FuzzySet* small_right = new FuzzySet(57.1, 60.7, 64.3, 67.8);
+    // FuzzySet* full_right = new FuzzySet(71.4, 75.0, 78.5, 82.11);
+    // FuzzySet* point_turn_right = new FuzzySet(85.7, 89.3, 96.4, 100.0); //Readjust others to include 3.57 per
+
+    // default to going straight
+    FuzzySet* center = new FuzzySet(0, 3.6, 7.1, 10.7); // Readjust others to include 3.57 per
+    FuzzySet* point_turn_left = new FuzzySet(14.3, 17.9, 21.4, 25.0);
+    FuzzySet* full_left = new FuzzySet(28.6, 32.1, 35.7, 39.3);
+    FuzzySet* small_left = new FuzzySet(42.8, 46.4, 50.0, 53.6);
     FuzzySet* small_right = new FuzzySet(57.1, 60.7, 64.3, 67.8);
     FuzzySet* full_right = new FuzzySet(71.4, 75.0, 78.5, 82.11);
     FuzzySet* point_turn_right = new FuzzySet(85.7, 89.3, 96.4, 100.0); //Readjust others to include 3.57 per
+
+    drive_state->addFuzzySet(center);
     drive_state->addFuzzySet(point_turn_left);
     drive_state->addFuzzySet(full_left);
     drive_state->addFuzzySet(small_left);
-    drive_state->addFuzzySet(center);
     drive_state->addFuzzySet(small_right);
     drive_state->addFuzzySet(full_right);
     drive_state->addFuzzySet(point_turn_right);
@@ -176,12 +180,14 @@ void fuzzy_init() {
     //Building LeftSL FuzzyRuleAntecedents
     FuzzyRuleAntecedent* leftsl_high_low = new FuzzyRuleAntecedent();
     leftsl_high_low->joinWithAND(LS_high, LL_low);
+    FuzzyRuleAntecedent* leftsl_high_high = new FuzzyRuleAntecedent();
+    leftsl_high_high->joinWithAND(LS_high, LL_high);
     FuzzyRuleAntecedent* leftsl_med_med = new FuzzyRuleAntecedent();
     leftsl_med_med->joinWithAND(LS_med, LL_med);
     FuzzyRuleAntecedent* leftsl_med_high = new FuzzyRuleAntecedent();
     leftsl_med_high->joinWithAND(LS_med, LL_high);
     FuzzyRuleAntecedent* leftsl_med_low = new FuzzyRuleAntecedent();
-    leftsl_med_low->joinWithAND(LS_med, LS_low);
+    leftsl_med_low->joinWithAND(LS_med, LL_low);
 
     //Building LeftSLM Part 2: Adding M
     FuzzyRuleAntecedent* left_high_low_low = new FuzzyRuleAntecedent();
@@ -198,6 +204,8 @@ void fuzzy_init() {
     left_med_med_high->joinWithAND(leftsl_med_med, LM_high);
     FuzzyRuleAntecedent* left_med_high_high = new FuzzyRuleAntecedent();
     left_med_high_high->joinWithAND(leftsl_med_high, LM_high);
+    FuzzyRuleAntecedent* left_high_high_low = new FuzzyRuleAntecedent();
+    left_high_high_low->joinWithAND(leftsl_high_high, LM_low);
 
 
     // Building RightMR FuzzyRuleAntecedents
@@ -243,6 +251,8 @@ void fuzzy_init() {
     //Building RightRS FuzzyRuleAntecedents
     FuzzyRuleAntecedent* rightrs_low_high = new FuzzyRuleAntecedent();
     rightrs_low_high->joinWithAND(RR_low, RS_high);
+    FuzzyRuleAntecedent* rightrs_high_high = new FuzzyRuleAntecedent();
+    rightrs_high_high->joinWithAND(RR_high, RS_high);
     FuzzyRuleAntecedent* rightrs_med_med = new FuzzyRuleAntecedent();
     rightrs_med_med->joinWithAND(RR_med, RS_med);
     FuzzyRuleAntecedent* rightrs_high_med = new FuzzyRuleAntecedent();
@@ -265,6 +275,8 @@ void fuzzy_init() {
     right_high_high_med->joinWithAND(RM_high, rightrs_high_med);
     FuzzyRuleAntecedent* right_high_med_med = new FuzzyRuleAntecedent();
     right_high_med_med->joinWithAND(RM_high, rightrs_med_med);
+    FuzzyRuleAntecedent* right_low_high_high = new FuzzyRuleAntecedent();
+    right_low_high_high->joinWithAND(RM_low, rightrs_high_high);
 
     // Building drive FuzzyRuleConsequents (Test 1 *********************************)
     // NOTE: you can add multiple outputs to 1 consequent
@@ -333,9 +345,9 @@ void fuzzy_init() {
     FuzzyRule* fr9 = new FuzzyRule(9, LMHMML, drive_small_left);
     fuzzy->addFuzzyRule(fr9);
 
-    FuzzyRuleAntecedent* MHML = new FuzzyRuleAntecedent();
-    MHML->joinWithAND(leftlm_med_high, rightmr_med_low);
-    FuzzyRule* fr10 = new FuzzyRule(10, MHML, drive_small_left);
+    FuzzyRuleAntecedent* LMHMLL = new FuzzyRuleAntecedent();
+    LMHMLL->joinWithAND(left_low_med_high, right_med_low_low);
+    FuzzyRule* fr10 = new FuzzyRule(10, LMHMLL, drive_small_left);
     fuzzy->addFuzzyRule(fr10);
 
     FuzzyRuleAntecedent* LMHLLL = new FuzzyRuleAntecedent();
@@ -544,32 +556,37 @@ void fuzzy_init() {
     MMHHMM->joinWithAND(left_med_med_high, right_high_med_med);
     FuzzyRule* fr51 = new FuzzyRule(51, MMHHMM, drive_center);
     fuzzy->addFuzzyRule(fr51);
+
+    FuzzyRuleAntecedent* LHHHLL = new FuzzyRuleAntecedent();
+    LHHHLL->joinWithAND(left_low_high_high, right_high_low_low);
+    FuzzyRule* fr52 = new FuzzyRule(52, LHHHLL, drive_point_turn_left);
+    fuzzy->addFuzzyRule(fr52);
+
+    FuzzyRuleAntecedent* LLHHHL = new FuzzyRuleAntecedent();
+    LLHHHL->joinWithAND(left_low_low_high, right_high_high_low);
+    FuzzyRule* fr53 = new FuzzyRule(53, LLHHHL, drive_point_turn_right);
+    fuzzy->addFuzzyRule(fr53);
+
+    FuzzyRuleAntecedent* HHLLLL = new FuzzyRuleAntecedent();
+    HHLLLL->joinWithAND(left_high_high_low, right_low_low_low);
+    FuzzyRule* fr54 = new FuzzyRule(54, HHLLLL, drive_point_turn_left);
+    fuzzy->addFuzzyRule(fr54);
+
+    FuzzyRuleAntecedent* LLLLHH = new FuzzyRuleAntecedent();
+    LLLLHH->joinWithAND(left_low_low_low, right_low_high_high);
+    FuzzyRule* fr55 = new FuzzyRule(55, LLLLHH, drive_point_turn_right);
+    fuzzy->addFuzzyRule(fr55);
 }
 
 //Check is the other robot is close using the ToF sensors
 void getToF() {
     //int* arr = (int*) malloc(sizeof(int) * 4);
-    RR_distance = sensor0.readRangeContinuousMillimeters();
-    RM_distance = sensor1.readRangeContinuousMillimeters();
-    LM_distance = sensor2.readRangeContinuousMillimeters();
-    LL_distance = sensor3.readRangeContinuousMillimeters();
-    RS_distance = sensor4.readRangeContinuousMillimeters();
+    RS_distance = sensor0.readRangeContinuousMillimeters();
+    RR_distance = sensor1.readRangeContinuousMillimeters();
+    RM_distance = sensor2.readRangeContinuousMillimeters();
+    LM_distance = sensor3.readRangeContinuousMillimeters();
+    LL_distance = sensor4.readRangeContinuousMillimeters();
     LS_distance = sensor5.readRangeContinuousMillimeters();
-    // if (sensor0.timeoutOccurred() || sensor1.timeoutOccurred() || sensor2.timeoutOccurred() || sensor3.timeoutOccurred()) { Serial.print(" SENSOR TIMEOUT"); }
-}
-
-//Use the set up fuzzy settings to determine how to move
-//Add 2 additional inputs
-void doFuzzy() {
-    fuzzy->setInput(1, RR_distance);
-    fuzzy->setInput(2, RM_distance);
-    fuzzy->setInput(3, LM_distance);
-    fuzzy->setInput(4, LL_distance);
-    fuzzy->setInput(5, RS_distance);
-    fuzzy->setInput(6, LS_distance);
-    fuzzy->fuzzify();
-    float output = fuzzy->defuzzify(1);
-
     // Serial.print("sensor0: ");
     // Serial.print(RS_distance);
     // Serial.print("\t");
@@ -587,52 +604,78 @@ void doFuzzy() {
     // Serial.print("\t");
     // Serial.print("sensor5: ");
     // Serial.println(LS_distance);
+    // if (sensor0.timeoutOccurred() || sensor1.timeoutOccurred() || sensor2.timeoutOccurred() || sensor3.timeoutOccurred()) { Serial.print(" SENSOR TIMEOUT"); }
+}
+
+//Use the set up fuzzy settings to determine how to move
+//Add 2 additional inputs
+void doFuzzy() {
+    fuzzy->setInput(1, LL_distance);
+    fuzzy->setInput(2, LM_distance);
+    fuzzy->setInput(3, RM_distance);
+    fuzzy->setInput(4, RR_distance);
+    fuzzy->setInput(5, RS_distance);
+    fuzzy->setInput(6, LS_distance);
+    fuzzy->fuzzify();
+    float output = fuzzy->defuzzify(1);
+    // Serial.print(output);
+    // Serial.print(" | ");
 
     if ((output >= 0) && (output < 10.7)) {
-        decision = "Point Turn Left";
-
-    } else if((output >= 10.7) && (output < 25)) {
-        decision = "Full Left";
-        RGB.color(0, 0, 255);
-
-        // L_command = v_full_slow;
-        // R_command = v_full_fast;
-        // L_dir = 1;
-        // R_dir = 1;
-    } else if((output >= 25) && (output < 39.3)) {
-        decision = "Small Left";
-        RGB.color(0, 128, 128);
-
-        // L_command = v_small_slow;
-        // R_command = v_small_fast;
-        // L_dir = 1;
-        // R_dir = 1;
-    } else if((output >= 39.3) && (output < 53.6)) {
         decision = "Center";
         RGB.color(0, 255, 0);
+        L_command = v_center;
+        R_command = v_center;
+        L_dir = 1;
+        R_dir = 0;
 
-        // L_command = v_center;
-        // R_command = v_center;
-        // L_dir = 1;
-        // R_dir = 1;
+    } else if((output >= 10.7) && (output < 25)) {
+        decision = "Point Turn Left";
+        RGB.color(0, 0, 255);
+
+        L_command = v_full_fast;
+        R_command = v_full_fast;
+        L_dir = 1;
+        R_dir = 1;
+    } else if((output >= 25) && (output < 39.3)) {
+        decision = "Full Left";
+        RGB.color(0, 128, 128);
+
+        L_command = v_full_slow;
+        R_command = v_full_fast;
+        L_dir = 1;
+        R_dir = 0;
+    } else if((output >= 39.3) && (output < 53.6)) {
+        decision = "Small Left";
+        RGB.color(0, 255, 128);
+
+        L_command = v_small_fast;
+        R_command = v_small_slow;
+        L_dir = 1;
+        R_dir = 0;
     } else if((output >= 53.6) && (output < 67.9)) {
         decision = "Small Right";
-        RGB.color(128, 128, 0);
+        RGB.color(128, 255, 0);
 
-        // L_command = v_small_fast;
-        // R_command = v_small_slow;
-        // L_dir = 1;
-        // R_dir = 1;
+        L_command = v_small_fast;
+        R_command = v_small_slow;
+        L_dir = 1;
+        R_dir = 0;
     } else if((output >= 67.9) && (output < 82.3)) {
         decision = "Full Right";
-        RGB.color(255, 0, 0);
+        RGB.color(128, 128, 0);
 
-        // L_command = v_full_fast;
-        // R_command = v_full_slow;
-        // L_dir = 1;
-        // R_dir = 1;
+        L_command = v_full_fast;
+        R_command = v_full_slow;
+        L_dir = 1;
+        R_dir = 0;
     } else if((output >= 82.3)) {
         decision = "Point Turn Right";
+        RGB.color(255, 0, 0);
+        L_command = v_full_fast;
+        R_command = v_full_fast;
+        L_dir = 0;
+        R_dir = 0;
     }
 }
 
@@ -640,38 +683,72 @@ void doFuzzy() {
 void checkSwitch() {
     if(RSflag == LOW) {
         stop();
-        // Serial.print("STOPPED");
+        Serial.print("STOPPED");
         while(true);
     }
 }
 
 //Check to see if the robot is near a line and adjust movement accordingly
 void checkLine() {
+    FLflag = 4095 - analogRead(FL) < 650;
+    FRflag = 4095 - analogRead(FR) < 650;
+    BLflag = 4095 - analogRead(BL) < 650;
+    BRflag = 4095 - analogRead(BR) < 650;
+    // Serial.println();
+    // Serial.print(analogRead(FLflag));
+    // Serial.print(" | ");
+    // Serial.println(analogRead(FRflag));
+
     if (!FLflag || !FRflag || prevFlagSet) {				// if front line triggered
         if (!prevFlagSet) {					// and if this is the FIRST detection of the line
-            RGB.color(255, 255, 255);
+            // RGB.color(255, 255, 255);
             prevFlag = cur;					// reset the turn timer
             prevFlagSet = true;				// ensures timer is reset only ONCE
             moveState(1);						// stop before you fall off
         }
+        // Serial.println("front line hit");
         moveState(10);						// begin/continue the turn sequence
+        // stop();
     } else if ((!BRflag || !BLflag) && !prevFlagSet) {		// if back line triggered, move forward
-        RGB.color(255, 255, 255);
-        moveState(0);
+        // RGB.color(255, 255, 255);
+        // Serial.println("back line hit");
+        if (!prevFlagSet) {                 // and if this is the FIRST detection of the line
+            // RGB.color(255, 255, 255);
+            prevFlag = cur;                 // reset the turn timer
+            prevFlagSet = true;             // ensures timer is reset only ONCE
+            moveState(1);                       // stop before you fall off
+        }
+        // Serial.println("front line hit");
+        moveState(11);
 
         // prevFlagSet = true;
 
     } else if(!prevFlagSet) {  // if a line hasn't been seen, continue fuzzy
         // Serial.println("Doing Fuzzy");
-        // prevFlagSet = false;
+        prevFlagSet = false;
     }
 }
 
 void checkEncoders() {
-    if (cur - LHit > stall || cur - RHit > stall) {
-        RGB.color(255, 0, 0);
-        prevFlag = cur;
-        prevFlagSet = true;
-        moveState(2);
+    // Serial.print(cur);
+    // Serial.print(" | ");
+    // Serial.print(LHit);
+    // Serial.print(" | ");
+    // Serial.println(RHit);
+
+    LStall = cur - LHit > stall;
+    RStall = cur - RHit > stall;
+
+    if ((LStall || RStall) && !prevFlagSet) {
+        if (!prevFlagSet) {                 // and if this is the FIRST detection of the line
+            // RGB.color(255, 255, 255);
+            prevFlag = cur;                 // reset the turn timer
+            prevFlagSet = true;             // ensures timer is reset only ONCE
+            moveState(1);                       // stop before you fall off
+        }
+        moveState(3);
+    } else if (!prevFlagSet) {  // if a line hasn't been seen, continue fuzzy
+        // Serial.println("Doing Fuzzy");
+        prevFlagSet = false;
     }
 }

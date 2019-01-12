@@ -17,6 +17,12 @@
 #include <init.h>
 
 //Defining variables
+VL53L0X sensor0;
+VL53L0X sensor1;
+VL53L0X sensor2;
+VL53L0X sensor3;
+VL53L0X sensor4;
+VL53L0X sensor5;
 
 // Line sensors: Front Left, Front Right, Back Left, Back Right
 int FL = A2;    // AUX BOARD SWITCHED FL and FR up
@@ -42,7 +48,7 @@ boolean prevFlagSet = false;
 boolean start = true;
 
 // remote start pin
-int RS = D4;
+int RS = D5;
 // remote start flag that is flipped once we press the button on the remote
 boolean RSflag = false;
 
@@ -56,22 +62,26 @@ int Rencoder = RX;
 int LHit = 0;
 int RHit = 0;
 
+int count1 = 0;
+int count2 = 0;
 //Setting flags to line sensors pins during an interrupt handler
-void FLISR() {
-    FLflag = digitalRead(FL);
-}
+// void FLISR() {
+//     FLflag = digitalRead(FL);
+//     // moveState(10);
+// }
 
-void FRISR() {
-    FRflag = digitalRead(FR);
-}
+// void FRISR() {
+//     FRflag = digitalRead(FR);
+//     // moveState(10);
+// }
 
-void BLISR() {
-    BLflag = digitalRead(BL);
-}
+// void BLISR() {
+//     BLflag = digitalRead(BL);
+// }
 
-void BRISR() {
-    BRflag = digitalRead(BR);
-}
+// void BRISR() {
+//     BRflag = digitalRead(BR);
+// }
 
 // interrupt handler for remote start
 void RSISR() {
@@ -81,10 +91,12 @@ void RSISR() {
 
 void LencoderISR() {
     LHit = cur;
+    count1++;
 }
 
 void RencoderISR() {
     RHit = cur;
+    count2++;
 }
 
 //Setting up TOF sensors
@@ -98,7 +110,7 @@ void tof_init() {
     // A1 to SHDN1
     // A7 to SHDN2
     // D2 to SHDN3
-    // D6 to SHDN 4
+    // D6 to SHDN4
     // D7 to SHDN5
     // procedure to set up multiple sensors to one I2C port
     pinMode(A0, OUTPUT);
@@ -126,17 +138,17 @@ void tof_init() {
     digitalWrite(D6, HIGH);
     digitalWrite(D7, HIGH);
     delay(10);
+    digitalWrite(A0, LOW);
     digitalWrite(A1, LOW);
     digitalWrite(A7, LOW);
     digitalWrite(D2, LOW);
-    digitalWrite(D6, LOW);
     digitalWrite(D7, LOW);
 
     sensor0.init();
     sensor0.setAddress(0x30);
     sensor0.setTimeout(1000);
     delay(10);
-    digitalWrite(A1, HIGH);
+    digitalWrite(D7, HIGH);
     sensor1.init();
     sensor1.setAddress(0x31);
     sensor1.setTimeout(1000);
@@ -151,23 +163,23 @@ void tof_init() {
     sensor3.setAddress(0x33);
     sensor3.setTimeout(1000);
     delay(10);
-    digitalWrite(D6, HIGH);
+    digitalWrite(A1, HIGH);
     sensor4.init();
     sensor4.setAddress(0x34);
     sensor4.setTimeout(1000);
     delay(10);
-    digitalWrite(D7, HIGH);
+    digitalWrite(A0, HIGH);
     sensor5.init();
     sensor5.setAddress(0x35);
     sensor5.setTimeout(1000);
     delay(10);
 
-    sensor0.startContinuous(100);
-    sensor1.startContinuous(100);
-    sensor2.startContinuous(100);
-    sensor3.startContinuous(100);
-    sensor4.startContinuous(100);
-    sensor5.startContinuous(100);
+    sensor0.startContinuous(10);
+    sensor1.startContinuous(10);
+    sensor2.startContinuous(10);
+    sensor3.startContinuous(10);
+    sensor4.startContinuous(10);
+    sensor5.startContinuous(10);
 }
 
 //Setting up pins for line sensor, remote start, and ESCs to right modes
@@ -190,17 +202,17 @@ void others_init() {
 
     // ***Remove for competition***
     // ***Serial monitor***
-    // Serial.begin(9600);	// *** need to modify before comp ***
+    //Serial.begin(9600);	// *** need to modify before comp ***
 }
 
 //Setting up line sensor interrupts so they can be triggered
 // ADD THE INTERRUPT FOR THE ENCODERS HERE
 void interrupt_init() {
     // Line sensors
-    attachInterrupt(FL, FLISR, CHANGE);
-    attachInterrupt(FR, FRISR, CHANGE);
-    attachInterrupt(BL, BLISR, CHANGE);
-    attachInterrupt(BR, BRISR, CHANGE);
+    // attachInterrupt(FL, FLISR, CHANGE);
+    // attachInterrupt(FR, FRISR, CHANGE);
+    // attachInterrupt(BL, BLISR, CHANGE);
+    // attachInterrupt(BR, BRISR, CHANGE);
     // Remote switch
     attachInterrupt(RS, RSISR, CHANGE);
 
@@ -222,12 +234,12 @@ void line_init() {
 
 //Wait 5 seconds before moving as per the rules
 void robot_init() {
-    while(RSflag == LOW) {    // initial LOW
+    while(RSflag == false) {    // initial LOW
         Serial.println("Waiting for Start");
     }
     Serial.println("Starting in 5 seconds...");
     delay(5000);
-    // Serial.println("GO!");
+    Serial.println("GO!");
 }
 
 // setting the startup sequence

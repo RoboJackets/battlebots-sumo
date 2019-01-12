@@ -62,32 +62,32 @@ void moveState(int state) {
   		L_command = line_fwd;
   		R_command = line_fwd;
   		L_dir = 1;
-  		R_dir = 1;
+  		R_dir = 0;
       // Serial.println("Back triggered, moving forward");
 	} else if (state == 2) { //Should be 1? Turn around because we saw a line from the front
     if (cur - prevFlag < degrees45) {
-      L_command = line_180;
-      R_command = line_180;
-      L_dir = 0;
-      R_dir = 1;
+      //L_command = line_180;
+      //R_command = line_180;
+      //L_dir = 1;
+      //R_dir = 1;
     } else {
       // Serial.print("start done");
       start = false;
       prevFlagSet = false;
     }
-  } else if (state == 2) { // stall detected! go back and ram forward
+  } else if (state == 3) { // stall detected! go back and ram forward
       if (cur - prevFlag < nudge) {     // go backwards a 'nudge'
         L_command = line_rev;
         R_command = line_rev;
         L_dir = 0;
-        R_dir = 0;
+        R_dir = 1;
         // Serial.println("Moving backwards a nudge");
-      } 
+      }
       else if (cur - prevFlag < ram) {
         L_command = 500;
         R_command = 500;
         L_dir = 1;
-        R_dir = 1;
+        R_dir = 0;
       }
       LHit = cur;
       RHit = cur;
@@ -97,13 +97,13 @@ void moveState(int state) {
 	  		L_command = line_rev;
 	  		R_command = line_rev;
 	  		L_dir = 0;
-	  		R_dir = 0;
-        // Serial.println("Moving backwards a nudge");
+	  		R_dir = 1;
+        Serial.println("Moving backwards a nudge");
 	    }
 	    else if (cur - prevFlag < degrees180) {	// turn cw 180
 	  		L_command = line_180;
 	  		R_command = line_180;
-	  		R_dir = 0;
+	  		R_dir = 1;
 	  		L_dir = 1;
         // Serial.println("Turning 180");
 	    }
@@ -113,7 +113,7 @@ void moveState(int state) {
 	      BLflag = true;
 	      BRflag = true;
 	      prevFlagSet = false;
-        // Serial.println("FINISHED DEALING WITH THE LINE");
+        Serial.println("FINISHED DEALING WITH THE LINE");
 	    }
 	    // moving = true;
 	} else {					// stop
@@ -121,6 +121,6 @@ void moveState(int state) {
   		R_command = 0;
   		R_dir = 1;
   		L_dir = 1;
-      // Serial.println("Stopped before death");
+      Serial.println("Stopped before death");
 	}
 }

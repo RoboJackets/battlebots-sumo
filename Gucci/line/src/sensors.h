@@ -60,6 +60,8 @@ extern int Lencoder;
 extern int Rencoder;
 extern int LHit;
 extern int RHit;
+extern boolean LStall;
+extern boolean RStall;
 
 // Fuzzy logic
 extern Fuzzy* fuzzy;

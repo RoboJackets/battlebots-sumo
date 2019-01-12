@@ -27,18 +27,20 @@ const int v_small_fast = 80;
 const int v_full_slow = 50;
 const int v_full_fast = 90;
 
+const int v_max = 150;
+
 const int v_center = 70;
 
 // Line sensor thresholds
-const int line_fwd = 75;		// max fwd
+const int line_fwd = 150;		// max fwd
 
-const int line_rev = 75;		// max rev
-const int nudge = 750;			// duration of reverse maneuver (ms)
+const int line_rev = 150;		// max rev
+const int nudge = 300;			// duration of reverse maneuver (ms)
 
-const int line_180 = 75;
-const int degrees180 = 1500; 	// duration of 180 deg turn (ms)
+const int line_180 = 150;
+const int degrees180 = 500; 	// duration of 180 deg turn (ms)
 
-const int degrees45 = 350;
+const int degrees45 = 170;
 const int ram = 2000;
 
 const int stall = 2500;
