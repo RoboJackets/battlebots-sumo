@@ -101,16 +101,16 @@ void tof_init() {
     // D6 to SHDN 4
     // D7 to SHDN5
     // procedure to set up multiple sensors to one I2C port
-    // pinMode(A0, OUTPUT);
-    pinMode(A1, OUTPUT);
-    // pinMode(A7, OUTPUT);
-    pinMode(D2, OUTPUT);
+    pinMode(A0, OUTPUT);
+    // pinMode(A1, OUTPUT);
+    pinMode(A7, OUTPUT);
+    // pinMode(D2, OUTPUT);
     // pinMode(D6, OUTPUT);
     // pinMode(D7, OUTPUT);
-    // digitalWrite(A0, LOW);
-    digitalWrite(A1, LOW);
-    // digitalWrite(A7, LOW);
-    digitalWrite(D2, LOW);
+    digitalWrite(A0, LOW);
+    // digitalWrite(A1, LOW);
+    digitalWrite(A7, LOW);
+    // digitalWrite(D2, LOW);
     // digitalWrite(D6, LOW);
     // digitalWrite(D7, LOW);
     delay(500);
@@ -119,38 +119,38 @@ void tof_init() {
     Wire.begin();
     delay(10);
 
-    // digitalWrite(A0, HIGH);
-    digitalWrite(A1, HIGH);
-    // digitalWrite(A7, HIGH);
-    digitalWrite(D2, HIGH);
+    digitalWrite(A0, HIGH);
+    // digitalWrite(A1, HIGH);
+    digitalWrite(A7, HIGH);
+    // digitalWrite(D2, HIGH);
     // digitalWrite(D6, HIGH);
     // digitalWrite(D7, HIGH);
     delay(10);
     // digitalWrite(A1, LOW);
-    // digitalWrite(A7, LOW);
-    digitalWrite(D2, LOW);
+    digitalWrite(A7, LOW);
+    // digitalWrite(D2, LOW);
     // digitalWrite(D6, LOW);
     // digitalWrite(D7, LOW);
 
-    // sensor0.init();
-    // sensor0.setAddress(0x30);
-    // sensor0.setTimeout(1000);
-    // delay(10);
-    // digitalWrite(A1, HIGH);
-    sensor1.init();
-    sensor1.setAddress(0x31);
-    sensor1.setTimeout(1000);
-    // delay(10);
-    // digitalWrite(A7, HIGH);
-    // sensor2.init();
-    // sensor2.setAddress(0x32);
-    // sensor2.setTimeout(1000);
-    // delay(10);
-    digitalWrite(D2, HIGH);
-    sensor3.init();
-    sensor3.setAddress(0x33);
-    sensor3.setTimeout(1000);
+    sensor0.init();
+    sensor0.setAddress(0x30);
+    sensor0.setTimeout(1000);
     delay(10);
+    // digitalWrite(A1, HIGH);
+    // sensor1.init();
+    // sensor1.setAddress(0x31);
+    // sensor1.setTimeout(1000);
+    // delay(10);
+    digitalWrite(A7, HIGH);
+    sensor2.init();
+    sensor2.setAddress(0x32);
+    sensor2.setTimeout(1000);
+    delay(10);
+    // digitalWrite(D2, HIGH);
+    // sensor3.init();
+    // sensor3.setAddress(0x33);
+    // sensor3.setTimeout(1000);
+    // delay(10);
     // digitalWrite(D6, HIGH);
     // sensor4.init();
     // sensor4.setAddress(0x34);
@@ -162,10 +162,10 @@ void tof_init() {
     // sensor5.setTimeout(1000);
     // delay(10);
 
-    // sensor0.startContinuous(100);
-    sensor1.startContinuous(100);
-    // sensor2.startContinuous(100);
-    sensor3.startContinuous(100);
+    sensor0.startContinuous(100);
+    // sensor1.startContinuous(100);
+    sensor2.startContinuous(100);
+    // sensor3.startContinuous(100);
     // sensor4.startContinuous(100);
     // sensor5.startContinuous(100);
 }

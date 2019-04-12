@@ -30,10 +30,10 @@
 
 #include <logic.h>
 
-// VL53L0X sensor0;
-VL53L0X sensor1;
-// VL53L0X sensor2;
-VL53L0X sensor3;
+VL53L0X sensor0;
+// VL53L0X sensor1;
+VL53L0X sensor2;
+// VL53L0X sensor3;
 // VL53L0X sensor4;
 // VL53L0X sensor5;
 int L_command = 0;
@@ -556,7 +556,7 @@ std::vector<int> l_past_values(10);
 void getToF() {
     //int* arr = (int*) malloc(sizeof(int) * 4);
     // RR_distance = sensor0.readRangeContinuousMillimeters();
-    RM_distance = sensor1.readRangeContinuousMillimeters();
+    RM_distance = sensor0.readRangeContinuousMillimeters();
     r_past_values.push_back(RM_distance);
     r_past_values.erase(r_past_values.begin());
     Serial.print("Right values: ");
@@ -565,7 +565,7 @@ void getToF() {
     }
     Serial.println();
     // LM_distance = sensor2.readRangeContinuousMillimeters();
-    LL_distance = sensor3.readRangeContinuousMillimeters();
+    LL_distance = sensor2.readRangeContinuousMillimeters();
     l_past_values.push_back(LL_distance);
     l_past_values.erase(r_past_values.begin());
     Serial.print("Left values: ");
@@ -593,13 +593,13 @@ void doFuzzy() {
     // Serial.print("sensor0: ");
     // Serial.print(RS_distance);
     // Serial.print("\t");
-    Serial.print("sensor1: ");
+    Serial.print("sensor0: ");
     Serial.print(RM_distance);
     Serial.print("\t");
     // Serial.print("sensor2: ");
     // Serial.print(RM_distance);
     // Serial.print("\t");
-    Serial.print("sensor3: ");
+    Serial.print("sensor2: ");
     Serial.print(LL_distance);
     Serial.print("\t\n");
     // Serial.print("sensor4: ");
@@ -622,12 +622,12 @@ void doFuzzy() {
       prev_l = *i;
     }
 
-    if (l_change < 0) {
+    if (l_change < 0 && LL_distance < approach_threshold) {
       prevFlag = cur;
       prevFlagSet = true;
       Serial.println("Dodge Right!");
       moveState(3);
-    } else if (r_change < 0) {
+    } else if (r_change < 0 && RM_distance < approach_threshold) {
       prevFlag = cur;
       prevFlagSet = true;
       Serial.println("Dodge Left!");
