@@ -5,7 +5,7 @@
 #ifndef SUMO_HOTFUZZ_H
 #define SUMO_HOTFUZZ_H
 
-void fuzzy_init();
+// void fuzzy_init();
 
 void getToF();
 

@@ -45,11 +45,11 @@ void setup() {
     others_init();		// line, remote, esc, ***printing***
     interrupt_init();	// interrupts for lines, remote, and eventually encoders/current
     ESC_init();			// Car ESCs
-    fuzzy_init();		// Fuzzy library************
+    // fuzzy_init();		// Fuzzy library************
 
     RGB.control(true); 	// take control of the on-board LED for debugging
 
-    robot_init();   // makes the bot wait 5s before starting as per the rules
+    // robot_init();   // makes the bot wait 5s before starting as per the rules
     line_init();		// initialize line variables
 }
 
@@ -59,16 +59,18 @@ void setup() {
 // The functions that robot loops through during the match
 void loop(){
   cur = millis();           // update timer
-  //RSflag = true;
-  //start = false;
+  RSflag = true;
+  start = false;
 
   if (start) {
     startUp(); //If the game has just begun move the robot forward(?) a bit
   }
 
+  moveState(0);
+
   if (!start) {
-    checkLine(); //Make sure we're not too close to a line
-    checkEncoders();
+    // checkLine(); //Make sure we're not too close to a line
+    // checkEncoders();
 
 
     // Serial.print(decision);
@@ -100,8 +102,8 @@ void loop(){
   // Serial.println(prevFlag);
   // Serial.println(start);
 
-	checkSwitch(); //See if we hit the off switch
-
+	// checkSwitch(); //See if we hit the off switch
+  
   move(1, R_command, R_dir); //Move based off what info we got from doFuzzy()
   move(2, L_command, L_dir);
 }

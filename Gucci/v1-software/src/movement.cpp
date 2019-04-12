@@ -57,12 +57,13 @@ void move(int motor, int speed, int direction){
 
 //Takes in a state number to decide what inputs the move methods should take
 void moveState(int state) {
-	// right now, there are only states 0, 1, and 10***
 	if(state == 0) {			// move forward because we saw a line from behind
   		L_command = line_fwd;
   		R_command = line_fwd;
   		L_dir = 1;
   		R_dir = 1;
+      //Just do nothing for now
+      stop();
       // Serial.println("Back triggered, moving forward");
 	} else if (state == 2) { //Should be 1? Turn around because we saw a line from the front
     if (cur - prevFlag < degrees45) {
@@ -82,7 +83,7 @@ void moveState(int state) {
         L_dir = 0;
         R_dir = 0;
         // Serial.println("Moving backwards a nudge");
-      } 
+      }
       else if (cur - prevFlag < ram) {
         L_command = 500;
         R_command = 500;
@@ -91,6 +92,28 @@ void moveState(int state) {
       }
       LHit = cur;
       RHit = cur;
+      prevFlagSet = false;
+  } else if (state == 3) { //Use 3 when an enemy is moving towards us from left side
+      if (cur - prevFlag < dodge) {
+        //Right motor reverses slowly
+        R_command = v_small_slow;
+        //Left motor reverses quickly
+        L_command = v_small_fast;
+        //Both are going in reverse
+        L_dir = 0;
+        R_dir = 0;
+      }
+      prevFlagSet = false;
+  } else if (state == 4) { //Use 4 when an enemy is moving towards us from right side
+      if (cur - prevFlag < dodge) {
+        //Right motor reverses slowly
+        R_command = v_small_fast;
+        //Left motor reverses quickly
+        L_command = v_small_slow;
+        //Both are going in reverse
+        L_dir = 0;
+        R_dir = 0;
+      }
       prevFlagSet = false;
   } else if (state == 10) {
 	    if (cur - prevFlag < nudge) {			// go backwards a 'nudge'
