@@ -622,12 +622,14 @@ void doFuzzy() {
       prev_l = *i;
     }
 
-    if (l_change < 0 && LL_distance < approach_threshold) {
+    if (l_change < approach_change_threshold
+        && LL_distance < approach_threshold) {
       prevFlag = cur;
       prevFlagSet = true;
       Serial.println("Dodge Right!");
       moveState(3);
-    } else if (r_change < 0 && RM_distance < approach_threshold) {
+    } else if (r_change < approach_change_threshold
+        && RM_distance < approach_threshold) {
       prevFlag = cur;
       prevFlagSet = true;
       Serial.println("Dodge Left!");

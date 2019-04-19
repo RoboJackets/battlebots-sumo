@@ -66,7 +66,12 @@ void loop(){
     startUp(); //If the game has just begun move the robot forward(?) a bit
   }
 
-  moveState(0);
+  // moveState(0);
+  moveState(3);
+  // stop();
+  while (true) {
+    Serial.println("Done");
+  }
 
   if (!start) {
     // checkLine(); //Make sure we're not too close to a line
@@ -103,7 +108,6 @@ void loop(){
   // Serial.println(start);
 
 	// checkSwitch(); //See if we hit the off switch
-  
   move(1, R_command, R_dir); //Move based off what info we got from doFuzzy()
   move(2, L_command, L_dir);
 }

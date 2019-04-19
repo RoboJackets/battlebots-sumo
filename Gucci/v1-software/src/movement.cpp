@@ -13,20 +13,22 @@
 Servo LESC;
 Servo RESC;
 
+int stopped = 1470;
+
 //Setting up servos
 void ESC_init() {
     // Necessary for Servo objects
     LESC.attach(Lmotor);
     RESC.attach(Rmotor);
     // Write stop command
-    LESC.writeMicroseconds(1250);
-    RESC.writeMicroseconds(1250);
+    LESC.writeMicroseconds(stopped);
+    RESC.writeMicroseconds(stopped);
 }
 
 //Stop the motors
 void stop() {
-  	LESC.writeMicroseconds(1250);
-  	RESC.writeMicroseconds(1250);
+  	LESC.writeMicroseconds(stopped);
+  	RESC.writeMicroseconds(stopped);
 }
 
 /**
@@ -41,12 +43,12 @@ void move(int motor, int speed, int direction){
   // 1100 for maximum reverse, 1800 for maximum forward
   // 30% throttle is 1250 +/- 300*0.3 = 1250 +/- 90
 
-  int pwm = 1250;       // default is ESC stopped
+  int pwm = stopped;       // default is ESC stopped
 
   if(direction == 1) {  // forward
-    pwm = 1250 + speed;
+    pwm = stopped + speed;
   } else {              // reverse
-    pwm = 1250 - speed;
+    pwm = stopped - speed;
   }
   if(motor == 1) {      // RIGHT ESC
     RESC.writeMicroseconds(pwm);
@@ -102,6 +104,8 @@ void moveState(int state) {
         //Both are going in reverse
         L_dir = 0;
         R_dir = 0;
+      } else {
+        stop();
       }
       prevFlagSet = false;
   } else if (state == 4) { //Use 4 when an enemy is moving towards us from right side

@@ -38,8 +38,9 @@ const int nudge = 750;			// duration of reverse maneuver (ms)
 const int line_180 = 75;
 const int degrees180 = 1500; 	// duration of 180 deg turn (ms)
 
-const int dodge = 750; // (Hopefully) duration of dodge maneuver
+const int dodge = 500; // (Hopefully) duration of dodge maneuver
 const int approach_threshold = 300;
+const int approach_change_threshold = -100;
 
 const int degrees45 = 350;
 const int ram = 2000;
