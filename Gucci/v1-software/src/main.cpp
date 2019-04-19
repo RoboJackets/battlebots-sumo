@@ -67,16 +67,17 @@ void loop(){
   }
 
   // moveState(0);
-  moveState(3);
-  // stop();
-  while (true) {
-    Serial.println("Done");
-  }
 
   if (!start) {
     // checkLine(); //Make sure we're not too close to a line
     // checkEncoders();
-
+    prevFlag = cur;
+    prevFlagSet = true;
+    moveState(3);
+    // stop();
+    // while (true) {
+    //   Serial.println("Done");
+    // }
 
     // Serial.print(decision);
     // Serial.print(" | ");
@@ -95,8 +96,11 @@ void loop(){
 
 
   	if (!prevFlagSet) {	// If we didn't see a line do Fuzzy logic to determine move inputs
-  		getToF();
-  		doFuzzy();
+  		// getToF();
+  		// doFuzzy();
+      // while (1) {
+      //   stop();
+      // }
   	}
   }
 
