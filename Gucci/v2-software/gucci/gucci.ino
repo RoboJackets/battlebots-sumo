@@ -15,11 +15,11 @@ void setup()
       Serial.println("setup 1");
       setup_distance();
       Serial.println("setup 2");
-      setup_current();
+//      setup_current();
       Serial.println("setup 3");
       setup_motors();
       Serial.println("setup 4");
-      setup_encoders();
+//      setup_encoders();
       Serial.println("setup 5");
       setup_line();
       Serial.println("setup 6");
@@ -100,7 +100,7 @@ void loop()
                   else
                   {
                          curr_state = state_machine();
-//                        curr_state = SEARCH;
+                        curr_state = SLAMMY_WHAMMY;
                         // Serial.println(digitalRead(LEFT_INT_LINE));
                         // Serial.println(digitalRead(RIGHT_INT_LINE));
                         // Serial.println(get_line_flag());
@@ -144,10 +144,12 @@ void loop()
                               break;
                         case SLAMMY_WHAMMY:
                               Serial.println("Come on and slam");
-                              drive(70, 70);
+                              drive(100, 100);
                               break;
                         case MEGA_SLAMMY_WHAMMY:
                               Serial.println("Gucci used Skull Bash. It was super effective!");
+                              drive(127, 127);
+                              break;
                         case PANIC_HIT:
                               // drive(40, 40);
                               Serial.println("We've been hit cap");
