@@ -1,11 +1,13 @@
 #include <SD.h>
 #include "gucci.h"
+#include "ICM20948.h"
 
 State curr_state;
 State last_state;
 long startTime;
 int useSD = 0;
 ICM20948 imu(Wire, (uint8_t)0x68);
+
 void setup()
 {
       Serial.println("starting setup");
@@ -29,7 +31,7 @@ void setup()
       Wire.setSCL(3);
       Wire.begin();
       Serial.println("Setting up SD card...");
-      if (SD.begin(BUIlTIN_SDCARD)) {
+      if (SD.begin(BUILTIN_SDCARD)) {
           Serial.println("Data logging initialized.");
           useSD = 1;
           File file = SD.open("guccii.csv", FILE_WRITE);
@@ -68,11 +70,11 @@ void loop()
                         line += ",";
                         line += String(imu.getAccelZ_mss(), 6);
                         line += ",";
-                        line += String(imu.getGryoX_rads(), 6);
+                        line += String(imu.getGyroX_rads(), 6);
                         line += ",";
-                        line += String(imu.getGryoY_rads(), 6);
+                        line += String(imu.getGyroY_rads(), 6);
                         line += ",";
-                        line += String(imu.getGryoZ_rads(), 6);
+                        line += String(imu.getGyroZ_rads(), 6);
 
                         File file = SD.open("guccii.csv", FILE_WRITE);
                         if (file) {
@@ -97,8 +99,8 @@ void loop()
                   }
                   else
                   {
-                        // curr_state = state_machine();
-                        curr_state = SEARCH;
+                         curr_state = state_machine();
+//                        curr_state = SEARCH;
                         // Serial.println(digitalRead(LEFT_INT_LINE));
                         // Serial.println(digitalRead(RIGHT_INT_LINE));
                         // Serial.println(get_line_flag());
@@ -106,7 +108,7 @@ void loop()
                         {
                         case SEARCH:
                               Serial.println("SEARCH");
-                              drive(70, 70);
+                              drive(-70, 70);
                               break;
                         case ADJUST_1_LEFT:
                               Serial.println("A1L");
@@ -148,16 +150,16 @@ void loop()
                               Serial.println("Gucci used Skull Bash. It was super effective!");
                         case PANIC_HIT:
                               // drive(40, 40);
-                              Serial.println("we've been hit cap");
+                              Serial.println("We've been hit cap");
                               break;
                         case PANIC_FIRE:
                               drive(0, 0);
-                              Serial.println("oh heck");
+                              Serial.println("Oh heck");
                               break;
                         }
                   }
             }
-            Serial.println("stop signal");
+            Serial.println("Stop signal received");
             drive(0, 0);
       }
 }
