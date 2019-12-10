@@ -1,8 +1,11 @@
+#include <SD.h>
 #include "gucci.h"
 
 State curr_state;
 State last_state;
 long startTime;
+int useSD = 0;
+ICM20948 imu(Wire, (uint8_t)0x68);
 void setup()
 {
       Serial.println("starting setup");
@@ -19,6 +22,27 @@ void setup()
       setup_line();
       Serial.println("setup 6");
       setup_remote();
+      Serial.println("Setting up IMU...");
+      pinMode(9, OUTPUT); // IMU address pin
+      digitalWrite(9, LOW);
+      Wire.setSDA(4);
+      Wire.setSCL(3);
+      Wire.begin();
+      Serial.println("Setting up SD card...");
+      if (SD.begin(BUIlTIN_SDCARD)) {
+          Serial.println("Data logging initialized.");
+          useSD = 1;
+          File file = SD.open("guccii.csv", FILE_WRITE);
+          if (file) {
+              file.println("time,state,x,y,z,rx,ry,rz");
+              file.close();
+          } else {
+              Serial.println("Could not open file.");
+          }
+      } else {
+          Serial.println("SD card is likely not present, so not data logging.");
+      }
+
       Serial.println("finished setup");
       startTime = millis(); // for testing purposes
 }
@@ -31,6 +55,34 @@ void loop()
             do_startup_action();
             while (digitalRead(REMOTE_PIN))
             {
+                  if (useSD) {
+                        imu.readSensor();
+                        String line = "";
+                        line += String(millis());
+                        line += ",";
+                        line += String(curr_state);
+                        line += ",";
+                        line += String(imu.getAccelX_mss(), 6);
+                        line += ",";
+                        line += String(imu.getAccelY_mss(), 6);
+                        line += ",";
+                        line += String(imu.getAccelZ_mss(), 6);
+                        line += ",";
+                        line += String(imu.getGryoX_rads(), 6);
+                        line += ",";
+                        line += String(imu.getGryoY_rads(), 6);
+                        line += ",";
+                        line += String(imu.getGryoZ_rads(), 6);
+
+                        File file = SD.open("guccii.csv", FILE_WRITE);
+                        if (file) {
+                              file.println(line);
+                              file.close();
+                        } else {
+                              Serial.println("Could not open file.");
+                        }
+                  }
+
                   if (get_line_flag())
                   {
                         drive(-60, -60);
@@ -41,7 +93,7 @@ void loop()
                         delay(200);
 //                        drive(-60, 60);
 //                        delay(500);
-                        
+
                   }
                   else
                   {
