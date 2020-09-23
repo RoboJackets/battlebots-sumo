@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="9.5.1">
+<eagle version="9.6.2">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -5635,7 +5635,7 @@ In this library you will find MOSFETs and other circuit elements commonly used f
 <part name="GND3" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="J1" library="I'mRADIOactive" deviceset="10118193-0001LF" device=""/>
 <part name="C4" library="SparkFun-Capacitors" library_urn="urn:adsk.eagle:library:510" deviceset="1.0UF" device="-0603-16V-10%" package3d_urn="urn:adsk.eagle:package:37414/1" value="1.0uF"/>
-<part name="U2" library="I'mRADIOactive" deviceset="ATMEGA32U4-AUR" device="" value="ATMEGA32U4-AU"/>
+<part name="U2" library="I'mRADIOactive" deviceset="ATMEGA32U4-AUR" device="" value="ATMEGA32U4-AUR"/>
 <part name="C1" library="SparkFun-Capacitors" library_urn="urn:adsk.eagle:library:510" deviceset="0.1UF" device="-0603-25V-(+80/-20%)" package3d_urn="urn:adsk.eagle:package:37414/1" value="0.1uF"/>
 <part name="C9" library="SparkFun-Capacitors" library_urn="urn:adsk.eagle:library:510" deviceset="0.1UF" device="-0603-25V-(+80/-20%)" package3d_urn="urn:adsk.eagle:package:37414/1" value="0.1uF"/>
 <part name="C10" library="SparkFun-Capacitors" library_urn="urn:adsk.eagle:library:510" deviceset="0.1UF" device="-0603-25V-(+80/-20%)" package3d_urn="urn:adsk.eagle:package:37414/1" value="0.1uF"/>
@@ -5739,19 +5739,19 @@ for Sumo Bot</text>
 <attribute name="NAME" x="53.34" y="53.34" size="1.778" layer="95"/>
 <attribute name="VALUE" x="53.34" y="15.24" size="1.27" layer="95"/>
 </instance>
-<instance part="GND2" gate="1" x="33.02" y="12.7" smashed="yes">
-<attribute name="VALUE" x="30.48" y="10.16" size="1.778" layer="96"/>
+<instance part="GND2" gate="1" x="35.56" y="12.7" smashed="yes">
+<attribute name="VALUE" x="33.02" y="10.16" size="1.778" layer="96"/>
 </instance>
-<instance part="SUPPLY3" gate="G$1" x="101.6" y="38.1" smashed="yes">
-<attribute name="VALUE" x="101.6" y="40.894" size="1.778" layer="96" align="bottom-center"/>
+<instance part="SUPPLY3" gate="G$1" x="35.56" y="53.34" smashed="yes">
+<attribute name="VALUE" x="35.56" y="56.134" size="1.778" layer="96" align="bottom-center"/>
 </instance>
 <instance part="C2" gate="G$1" x="231.14" y="177.8" smashed="yes">
 <attribute name="NAME" x="232.664" y="180.721" size="1.778" layer="95" font="vector"/>
 <attribute name="VALUE" x="232.664" y="175.641" size="1.778" layer="96" font="vector"/>
 </instance>
-<instance part="C3" gate="G$1" x="101.6" y="25.4" smashed="yes">
-<attribute name="NAME" x="103.124" y="28.321" size="1.778" layer="95" font="vector"/>
-<attribute name="VALUE" x="103.124" y="23.241" size="1.778" layer="96" font="vector"/>
+<instance part="C3" gate="G$1" x="35.56" y="45.72" smashed="yes">
+<attribute name="NAME" x="37.084" y="48.641" size="1.778" layer="95" font="vector"/>
+<attribute name="VALUE" x="37.084" y="43.561" size="1.778" layer="96" font="vector"/>
 </instance>
 <instance part="GND5" gate="1" x="213.36" y="73.66" smashed="yes">
 <attribute name="VALUE" x="210.82" y="71.12" size="1.778" layer="96"/>
@@ -6070,21 +6070,18 @@ for Sumo Bot</text>
 <segment>
 <pinref part="U1" gate="RFM59HCW" pin="GND@3"/>
 <pinref part="GND2" gate="1" pin="GND"/>
-<wire x1="78.74" y1="25.4" x2="33.02" y2="25.4" width="0.1524" layer="91"/>
-<wire x1="33.02" y1="25.4" x2="33.02" y2="15.24" width="0.1524" layer="91"/>
-<pinref part="U1" gate="RFM59HCW" pin="GND@2"/>
-<wire x1="78.74" y1="27.94" x2="15.24" y2="43.18" width="0.1524" layer="91"/>
-<wire x1="15.24" y1="43.18" x2="15.24" y2="15.24" width="0.1524" layer="91"/>
-<wire x1="15.24" y1="15.24" x2="33.02" y2="15.24" width="0.1524" layer="91"/>
-<junction x="33.02" y="15.24"/>
+<wire x1="78.74" y1="25.4" x2="78.74" y2="15.24" width="0.1524" layer="91"/>
+<wire x1="78.74" y1="15.24" x2="35.56" y2="15.24" width="0.1524" layer="91"/>
+<junction x="35.56" y="15.24"/>
 <pinref part="U1" gate="RFM59HCW" pin="GND@1"/>
-<wire x1="78.74" y1="30.48" x2="91.44" y2="27.94" width="0.1524" layer="91"/>
-<wire x1="91.44" y1="27.94" x2="91.44" y2="15.24" width="0.1524" layer="91"/>
-<wire x1="91.44" y1="15.24" x2="33.02" y2="15.24" width="0.1524" layer="91"/>
+<wire x1="78.74" y1="30.48" x2="91.44" y2="30.48" width="0.1524" layer="91"/>
+<wire x1="91.44" y1="30.48" x2="91.44" y2="15.24" width="0.1524" layer="91"/>
+<wire x1="91.44" y1="15.24" x2="35.56" y2="15.24" width="0.1524" layer="91"/>
+<pinref part="U1" gate="RFM59HCW" pin="GND@2"/>
+<wire x1="78.74" y1="27.94" x2="78.74" y2="25.4" width="0.1524" layer="91"/>
+<junction x="78.74" y="25.4"/>
 <pinref part="C3" gate="G$1" pin="2"/>
-<wire x1="101.6" y1="22.86" x2="101.6" y2="15.24" width="0.1524" layer="91"/>
-<wire x1="101.6" y1="15.24" x2="91.44" y2="15.24" width="0.1524" layer="91"/>
-<junction x="91.44" y="15.24"/>
+<wire x1="35.56" y1="43.18" x2="35.56" y2="15.24" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="GND5" gate="1" pin="GND"/>
@@ -6259,8 +6256,8 @@ for Sumo Bot</text>
 <net name="INT" class="0">
 <segment>
 <pinref part="U1" gate="RFM59HCW" pin="DIO0"/>
-<wire x1="78.74" y1="35.56" x2="88.9" y2="38.1" width="0.1524" layer="91"/>
-<label x="88.9" y="38.1" size="1.778" layer="95" xref="yes"/>
+<wire x1="78.74" y1="35.56" x2="88.9" y2="35.56" width="0.1524" layer="91"/>
+<label x="88.9" y="35.56" size="1.778" layer="95" xref="yes"/>
 </segment>
 <segment>
 <label x="63.5" y="127" size="1.778" layer="95" rot="R180" xref="yes"/>
@@ -6270,13 +6267,14 @@ for Sumo Bot</text>
 </net>
 <net name="3.3V" class="0">
 <segment>
-<pinref part="U1" gate="RFM59HCW" pin="VDD"/>
-<wire x1="48.26" y1="43.18" x2="101.6" y2="35.56" width="0.1524" layer="91"/>
 <pinref part="SUPPLY3" gate="G$1" pin="3.3V"/>
-<wire x1="101.6" y1="35.56" x2="101.6" y2="38.1" width="0.1524" layer="91"/>
+<wire x1="35.56" y1="50.8" x2="35.56" y2="53.34" width="0.1524" layer="91"/>
 <pinref part="C3" gate="G$1" pin="1"/>
-<wire x1="101.6" y1="35.56" x2="101.6" y2="30.48" width="0.1524" layer="91"/>
-<junction x="101.6" y="35.56"/>
+<wire x1="35.56" y1="53.34" x2="45.72" y2="53.34" width="0.1524" layer="91"/>
+<junction x="35.56" y="53.34"/>
+<wire x1="45.72" y1="53.34" x2="45.72" y2="43.18" width="0.1524" layer="91"/>
+<pinref part="U1" gate="RFM59HCW" pin="VDD"/>
+<wire x1="45.72" y1="43.18" x2="48.26" y2="43.18" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="C2" gate="G$1" pin="1"/>
@@ -6389,9 +6387,9 @@ for Sumo Bot</text>
 <net name="N$3" class="0">
 <segment>
 <pinref part="U1" gate="RFM59HCW" pin="ANT"/>
-<wire x1="78.74" y1="33.02" x2="78.74" y2="22.86" width="0.1524" layer="91"/>
+<wire x1="78.74" y1="33.02" x2="83.82" y2="33.02" width="0.1524" layer="91"/>
 <pinref part="JP2" gate="G$1" pin="1"/>
-<wire x1="78.74" y1="22.86" x2="83.82" y2="22.86" width="0.1524" layer="91"/>
+<wire x1="83.82" y1="33.02" x2="83.82" y2="22.86" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="MOSI" class="0">
